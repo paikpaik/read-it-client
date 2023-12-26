@@ -1,10 +1,28 @@
 import InputGroup from "@/components/InputGroup";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { FormEvent, useState } from "react";
 
 const Login = () => {
   let router = useRouter();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<any>({});
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      await axios.post(
+        "/auth/login",
+        { password, username },
+        { withCredentials: true }
+      );
+    } catch (error: any) {
+      console.log(error);
+      setErrors(error.response.data || {});
+    }
+  };
 
   return (
     <div className="bg-white">
